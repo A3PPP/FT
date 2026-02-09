@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Under Construction</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .postcard-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      min-height: 0;
+    }
+
+    .postcard {
+      position: relative;
+      max-width: 100%;
+      max-height: 100%;
+      aspect-ratio: 16 / 9;
+      border: 1px solid #fff;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .postcard__media {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .postcard__media video,
+    .postcard__media img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .postcard__media video.loaded,
+    .postcard__media img.loaded {
+      opacity: 1;
+    }
+
+    .postcard__media video {
+      width: 100%;
+      height: 100%;
+    }
+
+    .postcard__media img {
+      display: block;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1.5rem;
+      padding: 2rem;
+      flex-shrink: 0;
+    }
+
+    .buttons__btn {
+      padding: 0.5rem 1.25rem;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.875rem;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .buttons__btn:hover {
+      border-color: #fff;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="postcard-wrapper">
+    <div class="postcard">
+      <div class="postcard__media" id="media-container">
+        <!-- Media injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button type="button" class="buttons__btn">Button 1</button>
+    <button type="button" class="buttons__btn">Button 2</button>
+    <button type="button" class="buttons__btn">Button 3</button>
+    <button type="button" class="buttons__btn">Button 4</button>
+  </div>
+
+  <script>
+    // Media list – edit this array or sync from media-list.txt when extending
+    const MEDIA_LIST = [
+      'background.mp4',
+      'background1.mp4'
+    ];
+
+    const MEDIA_PATH = '/media/';
+    const VIDEO_EXTENSIONS = ['mp4', 'webm'];
+    const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
+
+    function getExtension(path) {
+      return path.split('.').pop().toLowerCase();
+    }
+
+    function isVideo(path) {
+      return VIDEO_EXTENSIONS.includes(getExtension(path));
+    }
+
+    function isImage(path) {
+      return IMAGE_EXTENSIONS.includes(getExtension(path));
+    }
+
+    let currentIndex = 0;
+    const container = document.getElementById('media-container');
+
+    function createMediaElement(path) {
+      const fullPath = MEDIA_PATH + path;
+      let el;
+
+      if (isVideo(path)) {
+        el = document.createElement('video');
+        el.src = fullPath;
+        el.autoplay = true;
+        el.muted = true;
+        el.loop = true;
+        el.playsInline = true;
+        el.setAttribute('playsinline', '');
+        el.addEventListener('loadeddata', () => el.classList.add('loaded'), { once: true });
+      } else if (isImage(path)) {
+        el = document.createElement('img');
+        el.src = fullPath;
+        el.alt = '';
+        el.addEventListener('load', () => el.classList.add('loaded'), { once: true });
+      } else {
+        return null;
+      }
+
+      return el;
+    }
+
+    function showMedia(index) {
+      if (MEDIA_LIST.length === 0) return;
+
+      currentIndex = ((index % MEDIA_LIST.length) + MEDIA_LIST.length) % MEDIA_LIST.length;
+      const path = MEDIA_LIST[currentIndex];
+      const el = createMediaElement(path);
+
+      if (!el) {
+        showMedia(currentIndex + 1);
+        return;
+      }
+
+      container.innerHTML = '';
+      container.appendChild(el);
+    }
+
+    function nextMedia() {
+      showMedia(currentIndex + 1);
+    }
+
+    container.addEventListener('click', nextMedia);
+    showMedia(0);
+  </script>
+</body>
+</html>
