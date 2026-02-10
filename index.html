@@ -19,101 +19,137 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       font-family: system-ui, -apple-system, sans-serif;
     }
 
     .postcard-wrapper {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      min-height: 0;
-    }
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  width: 100%;
+}
 
     .postcard {
       position: relative;
-      max-width: 100%;
-      max-height: 100%;
+      width: min(92vw, 1400px);
+      height: auto;
       aspect-ratio: 16 / 9;
-      border: 1px solid #fff;
+      border: 8px solid #fff;
+      box-shadow: 0 0 40px rgba(255,255,255,0.15);
       overflow: hidden;
       background: #000;
     }
 
     .postcard__media {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      position: relative;
-    }
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
 
-    .postcard__media video,
-    .postcard__media img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
+/* VIDEOS: fill the frame, cinematic crop */
+.postcard__media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-    .postcard__media video.loaded,
-    .postcard__media img.loaded {
-      opacity: 1;
-    }
+/* IMAGES: preserve native ratio, scale from centre */
+.postcard__media img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
 
-    .postcard__media video {
-      width: 100%;
-      height: 100%;
-    }
+/* Shared fade-in */
+.postcard__media video,
+.postcard__media img {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
 
-    .postcard__media img {
-      display: block;
-    }
+.postcard__media video.loaded,
+.postcard__media img.loaded {
+  opacity: 1;
+}
+.buttons {
+  width: min(92vw, 1400px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: nowrap;
+}
+  .buttons__btn {
+  flex: 1;
+  max-width: 240px;
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.buttons__btn img {
+  max-width: 80px;
+  height: auto;
+  display: block;
+  opacity: 0.85;
+}
 
-    .buttons {
-      display: flex;
-      gap: 1.5rem;
-      padding: 2rem;
-      flex-shrink: 0;
-    }
+.buttons__btn:hover img {
+  opacity: 1;
+}
 
-    .buttons__btn {
-      padding: 0.5rem 1.25rem;
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 0.875rem;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: border-color 0.2s, color 0.2s;
-    }
+.buttons__label {
+  display: none;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
 
-    .buttons__btn:hover {
-      border-color: #fff;
-      color: #fff;
-    }
+   
+.buttons__btn:not(:last-child) {
+  margin-right: 1.5rem;
+}
   </style>
 </head>
 <body>
   <div class="postcard-wrapper">
-    <div class="postcard">
-      <div class="postcard__media" id="media-container">
-        <!-- Media injected by JS -->
-      </div>
-    </div>
+  <div class="postcard">
+    <div class="postcard__media" id="media-container"></div>
   </div>
 
   <div class="buttons">
-    <button type="button" class="buttons__btn">Button 1</button>
-    <button type="button" class="buttons__btn">Button 2</button>
-    <button type="button" class="buttons__btn">Button 3</button>
-    <button type="button" class="buttons__btn">Button 4</button>
+    <button class="buttons__btn">
+  <img src="buttons/button1.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+  <span class="buttons__label">Button 1</span>
+</button>
+    <button class="buttons__btn">
+  <img src="buttons/button2.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+  <span class="buttons__label">Button 2</span>
+</button>
+    <button class="buttons__btn">
+  <img src="buttons/button3.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+  <span class="buttons__label">Button 3</span>
+</button>
+    <button class="buttons__btn">
+  <img src="buttons/button4.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+  <span class="buttons__label">Button 4</span>
+</button>
   </div>
+</div>
 
   <script>
     // Media list – edit this array or sync from media-list.txt when extending
@@ -122,7 +158,7 @@
       'background1.mp4'
     ];
 
-    const MEDIA_PATH = '/media/';
+    const MEDIA_PATH = 'media/';
     const VIDEO_EXTENSIONS = ['mp4', 'webm'];
     const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
 
