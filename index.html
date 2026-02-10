@@ -16,6 +16,7 @@
       height: 100%;
       background: #000;
       overflow: hidden;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -23,7 +24,7 @@
       font-family: system-ui, -apple-system, sans-serif;
     }
 
-    .postcard-wrapper {
+  .postcard-wrapper {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -31,18 +32,19 @@
   justify-content: center;
   gap: 1.25rem;
   width: 100%;
+  max-height: 100vh;
 }
 
     .postcard {
-      position: relative;
-      width: min(92vw, 1400px);
-      height: auto;
-      aspect-ratio: 16 / 9;
-      border: 8px solid #fff;
-      box-shadow: 0 0 40px rgba(255,255,255,0.15);
-      overflow: hidden;
-      background: #000;
-    }
+  position: relative;
+  width: min(92vw, 1400px);
+  max-height: 70vh;
+  aspect-ratio: 16 / 9;
+  border: 8px solid #fff;
+  box-shadow: 0 0 40px rgba(255,255,255,0.15);
+  overflow: hidden;
+  background: #000;
+}
 
     .postcard__media {
   width: 100%;
@@ -87,25 +89,25 @@
   align-items: center;
   gap: 1.5rem;
   flex-wrap: nowrap;
+  flex-shrink: 0;
 }
   .buttons__btn {
   flex: 1;
   max-width: 240px;
+  height: 120px; /* or whatever height you’re using */
+  padding: 0;
+  border: none;
   background: transparent;
-  border: 1.5px solid rgba(255, 255, 255, 0.6);
-  border-radius: 4px;
-  padding: 0.75rem 1rem;
+  overflow: hidden;
+  border-radius: 6px; /* optional */
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: border-color 0.2s ease, color 0.2s ease;
+  display: block;
 }
 .buttons__btn img {
-  max-width: 80px;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   display: block;
-  opacity: 0.85;
 }
 
 .buttons__btn:hover img {
@@ -114,9 +116,11 @@
 
 .buttons__label {
   display: none;
+  width: 100%;
+  text-align: center;
   color: rgba(255, 255, 255, 0.95);
   font-size: 0.95rem;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
 }
 
    
@@ -134,19 +138,19 @@
   <div class="buttons">
     <button class="buttons__btn">
   <img src="buttons/button1.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-  <span class="buttons__label">Button 1</span>
+  <span class="buttons__label">Explore</span>
 </button>
     <button class="buttons__btn">
   <img src="buttons/button2.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-  <span class="buttons__label">Button 2</span>
+  <span class="buttons__label">Collaborate</span>
 </button>
     <button class="buttons__btn">
   <img src="buttons/button3.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-  <span class="buttons__label">Button 3</span>
+  <span class="buttons__label">About</span>
 </button>
     <button class="buttons__btn">
   <img src="buttons/button4.png" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-  <span class="buttons__label">Button 4</span>
+  <span class="buttons__label">Contact</span>
 </button>
   </div>
 </div>
